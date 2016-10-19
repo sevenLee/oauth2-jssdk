@@ -21,7 +21,7 @@ function generateConfig(name) {
             new webpack.DefinePlugin({
                 'process.env': {
                     CLIENT: JSON.stringify(true),
-                    'NODE_ENV': JSON.stringify('development'),
+                    'NODE_ENV': JSON.stringify('development')
                 }
             }),
         ]

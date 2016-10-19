@@ -28,35 +28,28 @@
     </style>
 </head>
 <body>
-    <h3 style="width: 100%;">searchPath:<span style="word-wrap: break-word; color: blue;" id="searchPath"></span></h3>
-    <h3>此頁會redirect到FB or POS auth頁面</h3>
-    <button id="redirectBtn" class="btn">Fack FB Login</button>
+    <div style="width: 100%;">searchPath:<span style="word-wrap: break-word; color: blue;" id="searchPath"></span></div>
+    <h3>Fake Auth Page</h3>
+    <button id="redirectBtn" class="btn">Fake FB Login</button>
+
     <script>
         window.onload = function () {
             var searchPath  = document.getElementById('searchPath');
             var redirectBtn = document.getElementById('redirectBtn');
             var regex       = /([^#?&=]+)=([^&]*)/g;
             var state       = '';
-
-
             var searchStr = window.location.search.substring(1);
 
             while ((match = regex.exec(searchStr)) !== null) {
-                console.log('match[1]:', match[1]);
-                console.log('match[2]:', match[2]);
-
                 if (match[1] === 'state') {
                     state = match[2];
                 }
-
             }
 
             redirectBtn.addEventListener('click', function () {
-                var hash = '#access_token=bHLgV4q6--&token_type=bearer' + '&state=' + state;
-
-                console.log('hash:', hash);
+                var accessToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTc4OTAiLCJuYW1lIjoiSm9obiBEb2UiLCJhZG1pbiI6dHJ1ZX0.lJavQKFoa3WzRIDUVDDO4Cg79Ul2ax-1DfKVyiyJKe5MsTKRTrSOR7VYyxQjYszqDGEtB13P1NVgGj__sLandQh3_IeHbKIZZYzJmijMtnUuJtfcJW89nlFcNovNfGubn9atdIaAsgDYSsA2WWBunUhihHntnic83b7OoRLqQXvOEAqoh60NkQrAxlAwF_3vcUbAVD434fF-xdP0deNkikWqqLFWumcJa_oOUYENG1-hRgPUbabFC89rAR_hY5GtBZmVQDGpt-XK-nmAwNfcgRQOHT4TH1TaF6tstfwVx6EQPMXoNr-mVswWp7kRPAXu_tJQv-JGGd6Gihvu11DrMg';
+                var hash = '#access_token=' + accessToken + '&token_type=bearer' + '&state=' + state;
                 window.location = 'http://localhost:8080/redirect' + hash;
-
             });
 
             searchPath.innerHTML = window.location.search;

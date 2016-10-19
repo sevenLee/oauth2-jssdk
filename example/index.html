@@ -20,9 +20,8 @@
         service.authorize(function (token) {
             console.log('get token success!:', token);
         }, function (error) {
-            throw new Error("get access token error: " + error);
+            console.error('console get access token error:', error);
         });
-
     </script>
 </body>
 </html>

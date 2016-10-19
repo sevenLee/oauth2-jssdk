@@ -1,5 +1,5 @@
-var axios = require('axios');
-var MockAdapter = require('axios-mock-adapter');
+var jsrsasign = require('jsrsasign');
+var config = require('./config');
 var utils = require('./utils');
 var Token = require('./Token');
 
@@ -73,22 +73,23 @@ var ClientOauth2 = function(config){
         state: generateStateToken(),
         connection: config.connection
     };
+    this.accToken = null;
 };
 
 ClientOauth2.prototype = {
     /**
      * Open popup that use authorize uri, it will get access token from redirect Uri query string
      *
-     * you can directly get accessTokenObj (the object consists of the redirect uri query string parameters) from success callback parameter:
+     * you can directly get accessToken string from success callback parameter:
      *
-     *      service.authorize(function(accessTokenObj){
-     *          console.log(accessTokenObj);
+     *      service.authorize(function(accessToken){
+     *          console.log(accessToken);
      *      })
      *
      * you can also get error message from error callback:
      *
      *      service.authorize(successCallback, function(error){
-     *          throw new Error("get access token error: " + error);
+     *          new Error("get access token error: " + error);
      *      });
      *
      * @param {Function} success The callback function to handle success
@@ -106,14 +107,13 @@ ClientOauth2.prototype = {
         if (dialog) {
             window.oauth2Callback = function (hash) {
                 dialog.close();
-                // the redirectHandler function will handle reject/resolve
-                self._redirectHandler(params.state, success, error)(hash);
+                self._redirectHandler(params.state, success, error).call(self, hash);
             };
         }
     },
 
     getAccessToken: function() {
-        return Token.getToken();
+        return this.accToken;
     },
 
     _createUri: function (authEndpoint, params) {
@@ -140,6 +140,7 @@ ClientOauth2.prototype = {
     _redirectHandler: function(state, success, error) {
         return function (hash) {
             var oauthParams = parseHash(hash);
+            var isValid = false;
 
             if (oauthParams.state !== state) {
                 var msg = "OAuth Error: csrf detected - state parameter mismatch";
@@ -149,29 +150,23 @@ ClientOauth2.prototype = {
                 return;
             }
 
-            //todo: mock validation http request temporarily
-            var mock = new MockAdapter(axios);
+            //validation access token
+            try{
+                isValid = jsrsasign.jws.JWS.verifyJWT(oauthParams.access_token, config.jwt.verifyKey, {alg: ['RS256']});
+            }catch(err){
+                console.error(err);
+            }
 
-            //todo: validation access token
-            mock.onGet('/validation').reply(200, {
-                users: [
-                    { id: 1, name: 'John Smith' }
-                ]
-            });
+            if(isValid) {
+                Token(this, oauthParams.access_token);
+                this.accToken = oauthParams.access_token;
 
-            axios.get('/validation')
-                .then(function(response) {
-                    //todo: implement response data to replace oauthParams
-
-                    //save to localstorage
-                    Token(this, oauthParams);
-
-                    if(success && typeof success === 'function') {
-                        success(oauthParams);
-                    }
-                }, function(){
-                    if(typeof error === "function") {error("Failed to verify token")}
-                });
+                if(success && typeof success === 'function') {
+                    success(oauthParams.access_token);
+                }
+            }else{
+                if(typeof error === "function") {error("Failed to verify token")}
+            }
         };
     }
 };

@@ -5,9 +5,7 @@
     <title>Oauth Redirect</title>
 </head>
     <body>
-    <h3>Location上有Access token query string</h3>
-
-    <h3 style="width: 100%;">hash:<span style="word-wrap: break-word; color: blue;" id="hashPath"></span></h3>
+    <div style="width: 100%;">hash:<span style="word-wrap: break-word; color: blue;" id="hashPath"></span></div>
 
     <script>
         if (window.opener && typeof window.opener.oauth2Callback === "function") {
@@ -17,7 +15,6 @@
         window.onload = function() {
             var hashPath = document.getElementById('hashPath');
             hashPath.innerHTML = window.location.hash;
-
         }
     </script>
 </body>
