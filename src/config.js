@@ -1,5 +1,8 @@
 module.exports = {
     jwt: {
+        web: {
+            domain: 'web.domain'
+        },
         verifyKey: '-----BEGIN PUBLIC KEY-----\n\
 MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAnxgUSgsWJudY0feirFSV\
 kw7Gn927AidaeToo+pFOO0dhBowPvTIF1m9DB1gJkXEVigM6M1z+P3wkeT1o6JYa\

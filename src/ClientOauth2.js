@@ -141,6 +141,7 @@ ClientOauth2.prototype = {
         return function (hash) {
             var oauthParams = parseHash(hash);
             var isValid = false;
+            var segments = 0;
 
             if (oauthParams.state !== state) {
                 var msg = "OAuth Error: csrf detected - state parameter mismatch";
@@ -151,8 +152,17 @@ ClientOauth2.prototype = {
             }
 
             //validation access token
+            segments = oauthParams.access_token.split('.').length;
+            if(segments !== 3){
+                console.error('Invalid token.');
+                return;
+            }
+
             try{
-                isValid = jsrsasign.jws.JWS.verifyJWT(oauthParams.access_token, config.jwt.verifyKey, {alg: ['RS256']});
+                isValid = jsrsasign.jws.JWS.verifyJWT(oauthParams.access_token, config.jwt.verifyKey, {
+                    alg: ['RS256'],
+                    iss: [config.jwt.web.domain]
+                });
             }catch(err){
                 console.error(err);
             }

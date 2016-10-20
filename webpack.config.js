@@ -23,7 +23,7 @@ function generateConfig(name) {
                     CLIENT: JSON.stringify(true),
                     'NODE_ENV': JSON.stringify('development')
                 }
-            }),
+            })
         ]
     };
 
