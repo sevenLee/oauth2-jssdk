@@ -1,9 +1,9 @@
+"use strict";
+
 var jsrsasign = require('jsrsasign');
 var config = require('./config');
 var utils = require('./utils');
 var Token = require('./Token');
-
-'use strict';
 
 function sanitizeScope (connection, scopes) {
     if(Array.isArray(scopes)) {
