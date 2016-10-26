@@ -32,10 +32,6 @@ function objectToQueryString (obj) {
     return str.join("&");
 }
 
-function generateStateToken() {
-    return Math.random().toString(36).substr(2);
-}
-
 function parseHash(hash){
     var oauthObj = {};
     var queryString = hash.substring(1);
@@ -70,7 +66,7 @@ var ClientOauth2 = function(config){
         client_id: config.clientId,
         redirect_uri: config.redirectUri,
         scope: sanitizeScope(config.connection, config.scope),
-        state: generateStateToken(),
+        state: this._generateStateToken(),
         connection: config.connection
     };
     this.accToken = null;
@@ -105,6 +101,7 @@ ClientOauth2.prototype = {
         }
 
         if (dialog) {
+            this.dialog = dialog;
             window.oauth2Callback = function (hash) {
                 dialog.close();
                 self._redirectHandler(params.state, success, error).call(self, hash);
@@ -114,6 +111,10 @@ ClientOauth2.prototype = {
 
     getAccessToken: function() {
         return this.accToken;
+    },
+
+    _generateStateToken: function () {
+        return Math.random().toString(36).substr(2);
     },
 
     _createUri: function (authEndpoint, params) {

@@ -6,7 +6,8 @@
     "start:dev": "cross-env NODE_ENV=development nodemon server.js",
     "start": "cross-env NODE_ENV=development node server.js",
     "build": "cross-env NODE_ENV=production webpack --config webpack.config.build.js",
-    "build:prod": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js"
+    "build:prod": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
+    "test": "karma start"
   },
   "author": "",
   "license": "ISC",
