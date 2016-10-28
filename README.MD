@@ -24,6 +24,7 @@ You will get omapi access token in client application localStorage. Please Check
 |`start:dev`|Same as `npm start`, but enables nodemon for the server as well.|
 |`build`|compiles sdk lib to dist folder.|
 |`build:prod`|compiles and uglify sdk lib to dist folder. it will generate .min.js file.|
+|`test`|run with karma test runner|
 
 
 ### Prepare Redirect Page
