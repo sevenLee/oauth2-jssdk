@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Oauth Auth</title>
+    <style>
+        .btn{
+            display: inline-block;
+            padding: 6px 12px;
+            margin-bottom: 0;
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 1.42857143;
+            text-align: center;
+            white-space: nowrap;
+            vertical-align: middle;
+            -ms-touch-action: manipulation;
+            touch-action: manipulation;
+            cursor: pointer;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+            background-image: none;
+            border: 1px solid transparent;
+            border-radius: 4px
+        }
+    </style>
+</head>
+<body>
+    <div style="width: 100%;">searchPath:<span style="word-wrap: break-word; color: blue;" id="searchPath"></span></div>
+    <h3>Fake Auth Page</h3>
+    <button id="redirectBtn" class="btn">Fake FB Login</button>
+
+    <script>
+        window.onload = function () {
+            var searchPath  = document.getElementById('searchPath');
+            var redirectBtn = document.getElementById('redirectBtn');
+            var regex       = /([^#?&=]+)=([^&]*)/g;
+            var state       = '';
+            var searchStr = window.location.search.substring(1);
+
+            while ((match = regex.exec(searchStr)) !== null) {
+                if (match[1] === 'state') {
+                    state = match[2];
+                }
+            }
+
+            redirectBtn.addEventListener('click', function () {
+                var accessToken = 'eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJ3ZWIuZG9tYWluIiwic3ViIjoiMTIzNDU3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWV9.XcAfM7Dw7c5n1_VnFQjFQGZ-B64tUIQAFvjbXe4uEEVrupm_lpIuUDR9d-zFb9N_CE2wHZ7Nyjhp5laJwM3pfTVHxAN1Vvy-XFPOaa3suvhGMIo_J7S45Fwrg2l_C0hxh8sh2m56WeNApmrMbV9-tBgnwOWLPcY6DvSulqdZHXlGOkEQWoSKGIpqfRi27uBosKGOsErSwGcLAajWi-jaypWW6iZwUtvxcKN0y9S6ZdTKGgKVXisQ_drUbXGvcVTQ6NRSfMNBEDNm3GGB4-hFV7qw83JuWWt3kSO5J6vVPl3_DtGeaMdVkafhK1lNXxIEp3u2AV0gyYv9q41YZyJRVA';
+                var hash = '#access_token=' + accessToken + '&token_type=bearer' + '&state=' + state;
+                window.location = 'http://localhost:8080/redirect' + hash;
+            });
+
+            searchPath.innerHTML = window.location.search;
+        }
+    </script>
+</body>
+</html>

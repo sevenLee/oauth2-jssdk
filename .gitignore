@@ -9,3 +9,4 @@ node_modules
 .idea/
 .DS_Store
 om.oauth2-provider
+dist

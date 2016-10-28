@@ -1,0 +1,33 @@
+{
+  "name": "om_sdk_client_oauth2",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "start:dev": "cross-env NODE_ENV=development nodemon server.js",
+    "start": "cross-env NODE_ENV=development node server.js",
+    "build": "cross-env NODE_ENV=production webpack --config webpack.config.build.js",
+    "build:prod": "cross-env NODE_ENV=production webpack --config webpack.config.prod.js",
+    "test": "karma start"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "cross-env": "^3.1.3",
+    "expect": "^1.14.0",
+    "express": "^4.14.0",
+    "karma": "^0.13.22",
+    "karma-chrome-launcher": "^0.2.2",
+    "karma-mocha": "^0.2.2",
+    "karma-mocha-reporter": "^2.0.0",
+    "karma-sourcemap-loader": "^0.3.7",
+    "karma-webpack": "^1.7.0",
+    "mocha": "^2.4.5",
+    "nodemon": "^1.11.0",
+    "webpack": "^1.13.2",
+    "webpack-dev-middleware": "^1.8.3",
+    "webpack-hot-middleware": "^2.12.2"
+  },
+  "dependencies": {
+    "jsrsasign": "^6.1.4"
+  }
+}
